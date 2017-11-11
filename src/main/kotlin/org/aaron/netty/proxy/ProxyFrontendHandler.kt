@@ -35,7 +35,7 @@ class ProxyFrontendHandler(
         f.addListener({ future ->
             if (future.isSuccess) {
                 // connection complete start to read first data
-                inboundChannel.read()
+                ctx.read()
             } else {
                 // Close the connection if the connection attempt has failed.
                 inboundChannel.close()
