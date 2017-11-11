@@ -8,20 +8,18 @@ import io.netty.handler.logging.LoggingHandler
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
-class KotlinProxy {
+class KotlinProxy(
+        val localPort: Int,
+        val remoteHost: String,
+        val remotePort: Int
+) {
 
     companion object {
-        private val LOCAL_PORT = 8443
-
-        private val REMOTE_HOST = "www.google.com"
-
-        private val REMOTE_PORT = 443
-
         private val LOG = LoggerFactory.getLogger(KotlinProxy::class.java)
     }
 
     fun run() {
-        LOG.info("proxying *:{} to {}:{}", LOCAL_PORT, REMOTE_HOST, REMOTE_PORT)
+        LOG.info("proxying *:{} to {}:{}", localPort, remoteHost, remotePort)
 
         val bossGroup = createEventLoopGroup(1)
         val workerGroup = createEventLoopGroup()
@@ -33,9 +31,9 @@ class KotlinProxy {
             val channel = b.group(bossGroup, workerGroup)
                     .channel(serverSocketChannelClass().java)
                     .handler(LoggingHandler(LogLevel.DEBUG))
-                    .childHandler(ProxyInitializer(REMOTE_HOST, REMOTE_PORT))
+                    .childHandler(ProxyInitializer(remoteHost, remotePort))
                     .childOption(ChannelOption.AUTO_READ, false)
-                    .bind(LOCAL_PORT).sync().channel()
+                    .bind(localPort).sync().channel()
             LOG.info("listening channel {}", channel)
             channel.closeFuture().sync()
         } finally {
@@ -46,7 +44,11 @@ class KotlinProxy {
 }
 
 fun main(args: Array<String>) {
-    KotlinProxy().run()
+    KotlinProxy(
+            localPort = 8222,
+            remoteHost = "192.168.0.100",
+            remotePort = 22
+    ).run()
 
     Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS)
 }
