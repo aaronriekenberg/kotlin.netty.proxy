@@ -35,7 +35,7 @@ class ProxyFrontendHandler(
         f.addListener({ future ->
             if (future.isSuccess) {
                 // connection complete start to read first data
-                ctx.read()
+                inboundChannel.read()
             } else {
                 // Close the connection if the connection attempt has failed.
                 inboundChannel.close()
@@ -49,7 +49,7 @@ class ProxyFrontendHandler(
                 it.writeAndFlush(msg).addListener(ChannelFutureListener { future ->
                     if (future.isSuccess) {
                         // was able to flush out data, start to read the next chunk
-                        ctx.read()
+                        ctx.channel().read()
                     } else {
                         future.channel().close()
                     }

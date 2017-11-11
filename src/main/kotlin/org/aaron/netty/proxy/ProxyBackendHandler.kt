@@ -16,13 +16,13 @@ class ProxyBackendHandler(
     override fun channelActive(ctx: ChannelHandlerContext) {
         LOG.info("channelActive {}", ctx.channel());
 
-        ctx.read()
+        ctx.channel().read()
     }
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         inboundChannel.writeAndFlush(msg).addListener(ChannelFutureListener { future ->
             if (future.isSuccess) {
-                ctx.read()
+                ctx.channel().read()
             } else {
                 future.channel().close()
             }
