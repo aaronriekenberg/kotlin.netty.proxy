@@ -22,7 +22,7 @@ class ProxyBackendHandler(
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         inboundChannel.writeAndFlush(msg).addListener(ChannelFutureListener { future ->
             if (future.isSuccess) {
-                ctx.channel().read()
+                ctx.read()
             } else {
                 future.channel().close()
             }

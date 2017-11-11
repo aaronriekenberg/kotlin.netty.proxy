@@ -49,7 +49,7 @@ class ProxyFrontendHandler(
                 it.writeAndFlush(msg).addListener(ChannelFutureListener { future ->
                     if (future.isSuccess) {
                         // was able to flush out data, start to read the next chunk
-                        ctx.channel().read()
+                        ctx.read()
                     } else {
                         future.channel().close()
                     }
