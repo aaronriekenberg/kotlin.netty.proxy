@@ -3,8 +3,6 @@ package org.aaron.netty.proxy
 import com.google.common.util.concurrent.Uninterruptibles
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
-import io.netty.channel.nio.NioEventLoopGroup
-import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.logging.LoggingHandler
 import org.slf4j.LoggerFactory
@@ -25,13 +23,15 @@ class KotlinProxy {
     fun run() {
         LOG.info("proxying *:{} to {}:{}", LOCAL_PORT, REMOTE_HOST, REMOTE_PORT)
 
-        val bossGroup = NioEventLoopGroup(1)
-        val workerGroup = NioEventLoopGroup()
+        val bossGroup = createEventLoopGroup(1)
+        val workerGroup = createEventLoopGroup()
+
+        LOG.info("bossGroup = {} workerGroup = {}", bossGroup, workerGroup)
 
         try {
             val b = ServerBootstrap()
             val channel = b.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel::class.java)
+                    .channel(serverSocketChannelClass().java)
                     .handler(LoggingHandler(LogLevel.DEBUG))
                     .childHandler(ProxyInitializer(REMOTE_HOST, REMOTE_PORT))
                     .childOption(ChannelOption.AUTO_READ, false)
