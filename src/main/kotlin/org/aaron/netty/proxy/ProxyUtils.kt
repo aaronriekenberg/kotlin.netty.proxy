@@ -41,7 +41,7 @@ fun closeOnFlush(channel: Channel?) {
 
 fun writeChunkAndTriggerRead(readChannel: Channel, writeChannel: Channel, chunk: Any) {
     if (writeChannel.isActive) {
-        writeChannel.writeAndFlush(chunk).addListener(ChannelFutureListener { future ->
+        writeChannel.writeAndFlush(chunk).addListener({ future ->
             if (future.isSuccess) {
                 readChannel.read()
             } else {
