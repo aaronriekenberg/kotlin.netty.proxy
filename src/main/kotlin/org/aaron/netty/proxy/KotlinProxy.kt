@@ -45,8 +45,8 @@ fun main(args: Array<String>) {
     }
 
     KotlinProxy(
-            localPort = 8222,
-            remoteHost = "192.168.0.100",
-            remotePort = 22
+            localPort = args[0].toInt(),
+            remoteHost = args[1],
+            remotePort = args[2].toInt()
     ).run()
 }
