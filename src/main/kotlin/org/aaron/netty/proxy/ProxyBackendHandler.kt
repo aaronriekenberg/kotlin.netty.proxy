@@ -14,7 +14,7 @@ class ProxyBackendHandler(
     }
 
     override fun channelActive(ctx: ChannelHandlerContext) {
-        LOG.info("channelActive {}", ctx);
+        LOG.info("channelActive {}", ctx.channel());
 
         ctx.read()
     }
@@ -30,13 +30,13 @@ class ProxyBackendHandler(
     }
 
     override fun channelInactive(ctx: ChannelHandlerContext) {
-        LOG.info("channelInactive {}", ctx)
+        LOG.info("channelInactive {}", ctx.channel())
 
         closeOnFlush(inboundChannel)
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
-        LOG.warn("exceptionCaught {}", ctx, cause)
+        LOG.warn("exceptionCaught {}", ctx.channel(), cause)
 
         closeOnFlush(ctx.channel())
     }

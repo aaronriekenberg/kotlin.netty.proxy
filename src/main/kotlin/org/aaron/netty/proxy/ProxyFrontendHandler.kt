@@ -18,7 +18,7 @@ class ProxyFrontendHandler(
     private var outboundChannel: Channel? = null
 
     override fun channelActive(ctx: ChannelHandlerContext) {
-        LOG.info("channelActive {}", ctx)
+        LOG.info("channelActive {}", ctx.channel())
 
         val inboundChannel = ctx.channel()
 
@@ -59,13 +59,13 @@ class ProxyFrontendHandler(
     }
 
     override fun channelInactive(ctx: ChannelHandlerContext) {
-        LOG.info("channelInactive {}", ctx)
+        LOG.info("channelInactive {}", ctx.channel())
 
         closeOnFlush(outboundChannel)
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
-        LOG.warn("exceptionCaught {}", ctx, cause)
+        LOG.warn("exceptionCaught {}", ctx.channel(), cause)
 
         closeOnFlush(ctx.channel())
     }
