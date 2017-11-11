@@ -11,8 +11,7 @@ import java.util.concurrent.TimeUnit
 class KotlinProxy(
         val localPort: Int,
         val remoteHost: String,
-        val remotePort: Int
-) {
+        val remotePort: Int) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(KotlinProxy::class.java)
