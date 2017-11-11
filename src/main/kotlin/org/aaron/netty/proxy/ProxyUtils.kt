@@ -38,3 +38,15 @@ fun closeOnFlush(channel: Channel?) {
         }
     }
 }
+
+fun writeChunkAndTriggerRead(readChannel: Channel, writeChannel: Channel, chunk: Any) {
+    if (writeChannel.isActive) {
+        writeChannel.writeAndFlush(chunk).addListener(ChannelFutureListener { future ->
+            if (future.isSuccess) {
+                readChannel.read()
+            } else {
+                writeChannel.close()
+            }
+        })
+    }
+}

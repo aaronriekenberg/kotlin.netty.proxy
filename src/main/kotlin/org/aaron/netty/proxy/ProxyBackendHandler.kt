@@ -1,7 +1,6 @@
 package org.aaron.netty.proxy
 
 import io.netty.channel.Channel
-import io.netty.channel.ChannelFutureListener
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import org.slf4j.LoggerFactory
@@ -20,13 +19,7 @@ class ProxyBackendHandler(
     }
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
-        inboundChannel.writeAndFlush(msg).addListener(ChannelFutureListener { future ->
-            if (future.isSuccess) {
-                ctx.channel().read()
-            } else {
-                future.channel().close()
-            }
-        })
+        writeChunkAndTriggerRead(ctx.channel(), inboundChannel, msg)
     }
 
     override fun channelInactive(ctx: ChannelHandlerContext) {
