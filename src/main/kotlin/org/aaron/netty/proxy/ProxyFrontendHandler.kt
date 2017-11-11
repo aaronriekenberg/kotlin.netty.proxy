@@ -25,7 +25,7 @@ class ProxyFrontendHandler(
         // Start the connection attempt.
         val b = Bootstrap()
         b.group(inboundChannel.eventLoop())
-                .channel(ctx.channel().javaClass)
+                .channel(inboundChannel.javaClass)
                 .handler(ProxyBackendHandler(inboundChannel))
                 .option(ChannelOption.AUTO_READ, false)
 

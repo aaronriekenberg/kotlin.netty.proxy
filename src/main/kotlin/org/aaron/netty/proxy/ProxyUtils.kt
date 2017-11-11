@@ -16,22 +16,18 @@ import io.netty.channel.socket.nio.NioServerSocketChannel
 import kotlin.reflect.KClass
 
 fun createEventLoopGroup(threads: Int = 0): EventLoopGroup {
-    if (Epoll.isAvailable()) {
-        return EpollEventLoopGroup(threads)
-    } else if (KQueue.isAvailable()) {
-        return KQueueEventLoopGroup(threads)
-    } else {
-        return NioEventLoopGroup(threads)
+    return when {
+        Epoll.isAvailable() -> EpollEventLoopGroup(threads)
+        KQueue.isAvailable() -> KQueueEventLoopGroup(threads)
+        else -> NioEventLoopGroup(threads)
     }
 }
 
 fun serverSocketChannelClass(): KClass<out ServerSocketChannel> {
-    if (Epoll.isAvailable()) {
-        return EpollServerSocketChannel::class
-    } else if (KQueue.isAvailable()) {
-        return KQueueServerSocketChannel::class
-    } else {
-        return NioServerSocketChannel::class
+    return when {
+        Epoll.isAvailable() -> EpollServerSocketChannel::class
+        KQueue.isAvailable() -> KQueueServerSocketChannel::class
+        else -> NioServerSocketChannel::class
     }
 }
 
