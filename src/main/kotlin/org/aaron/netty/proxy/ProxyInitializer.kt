@@ -2,8 +2,6 @@ package org.aaron.netty.proxy
 
 import io.netty.channel.ChannelInitializer
 import io.netty.channel.socket.SocketChannel
-import io.netty.handler.logging.LogLevel
-import io.netty.handler.logging.LoggingHandler
 import org.slf4j.LoggerFactory
 
 class ProxyInitializer(
@@ -18,7 +16,6 @@ class ProxyInitializer(
         LOG.info("initChannel {}", ch)
 
         ch.pipeline().addLast(
-                LoggingHandler(LogLevel.DEBUG),
                 ProxyFrontendHandler(remoteHost, remotePort))
     }
 

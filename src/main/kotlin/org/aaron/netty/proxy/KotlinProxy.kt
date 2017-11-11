@@ -3,8 +3,6 @@ package org.aaron.netty.proxy
 import com.google.common.util.concurrent.Uninterruptibles
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
-import io.netty.handler.logging.LogLevel
-import io.netty.handler.logging.LoggingHandler
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
@@ -29,7 +27,6 @@ class KotlinProxy(
             val b = ServerBootstrap()
             val channel = b.group(bossGroup, workerGroup)
                     .channel(serverSocketChannelClass().java)
-                    .handler(LoggingHandler(LogLevel.DEBUG))
                     .childHandler(ProxyInitializer(remoteHost, remotePort))
                     .childOption(ChannelOption.AUTO_READ, false)
                     .bind(localPort).sync().channel()
