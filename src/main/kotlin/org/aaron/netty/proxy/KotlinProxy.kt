@@ -1,10 +1,9 @@
 package org.aaron.netty.proxy
 
-import com.google.common.util.concurrent.Uninterruptibles
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
 import org.slf4j.LoggerFactory
-import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 class KotlinProxy(
         private val localPort: Int,
@@ -40,11 +39,14 @@ class KotlinProxy(
 }
 
 fun main(args: Array<String>) {
+    if (args.size != 3) {
+        println("Usage: KotlinProxy <local port> <remote host> <remote port>")
+        exitProcess(1)
+    }
+
     KotlinProxy(
             localPort = 8222,
             remoteHost = "192.168.0.100",
             remotePort = 22
     ).run()
-
-    Uninterruptibles.sleepUninterruptibly(5, TimeUnit.SECONDS)
 }
