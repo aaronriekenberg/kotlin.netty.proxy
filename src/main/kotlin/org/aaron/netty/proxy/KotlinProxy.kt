@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
 class KotlinProxy(
-        val localPort: Int,
-        val remoteHost: String,
-        val remotePort: Int) {
+        private val localPort: Int,
+        private val remoteHost: String,
+        private val remotePort: Int) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(KotlinProxy::class.java)
