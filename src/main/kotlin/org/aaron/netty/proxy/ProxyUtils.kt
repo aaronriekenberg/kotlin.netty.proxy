@@ -39,7 +39,9 @@ fun Channel.closeOnFlush() {
     }
 }
 
-fun writeChunkAndTriggerRead(readChannel: Channel, writeChannel: Channel, chunk: Any) {
+fun writeChunkAndTriggerRead(readChannel: Channel, writeChannel: Channel, chunk: Any): Boolean {
+    var consumedChunk = false
+
     if (writeChannel.isActive) {
         writeChannel.writeAndFlush(chunk).addListener({ future ->
             if (future.isSuccess) {
@@ -48,5 +50,8 @@ fun writeChunkAndTriggerRead(readChannel: Channel, writeChannel: Channel, chunk:
                 writeChannel.close()
             }
         })
+        consumedChunk = true
     }
+
+    return consumedChunk
 }
