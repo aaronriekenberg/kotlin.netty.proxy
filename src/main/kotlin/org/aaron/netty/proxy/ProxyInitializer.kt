@@ -15,8 +15,7 @@ class ProxyInitializer(
     override fun initChannel(ch: SocketChannel) {
         LOG.info("initChannel {}", ch)
 
-        ch.pipeline().addLast(
-                ProxyFrontendHandler(remoteHost, remotePort))
+        ch.pipeline().addLast(ProxyFrontendHandler(remoteHost, remotePort))
     }
 
 }
