@@ -55,13 +55,13 @@ class ProxyFrontendHandler(
     override fun channelInactive(ctx: ChannelHandlerContext) {
         LOG.info("channelInactive {}", ctx.channel())
 
-        closeOnFlush(outboundChannel)
+        outboundChannel?.closeOnFlush()
     }
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
         LOG.warn("exceptionCaught {}", ctx.channel(), cause)
 
-        closeOnFlush(ctx.channel())
+        ctx.channel().closeOnFlush()
     }
 
 }

@@ -31,11 +31,9 @@ fun serverSocketChannelClass(): KClass<out ServerSocketChannel> {
     }
 }
 
-fun closeOnFlush(channel: Channel?) {
-    channel?.let {
-        if (it.isActive) {
-            it.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE)
-        }
+fun Channel.closeOnFlush() {
+    if (isActive) {
+        writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE)
     }
 }
 
