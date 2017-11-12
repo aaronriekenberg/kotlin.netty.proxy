@@ -40,7 +40,7 @@ fun Channel.closeOnFlush() {
     }
 }
 
-fun Channel?.writeChunkAndTriggerRead(readChannel: Channel, chunk: Any) {
+fun Channel?.writeChunkAndTriggerRead(chunk: Any, readChannel: Channel) {
     var consumedChunk = false
 
     try {
