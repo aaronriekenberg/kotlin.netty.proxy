@@ -48,7 +48,10 @@ class ProxyFrontendHandler(
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         outboundChannel?.let {
-            writeChunkAndTriggerRead(ctx.channel(), it, msg)
+            writeChunkAndTriggerRead(
+                    readChannel = ctx.channel(),
+                    writeChannel = it,
+                    chunk = msg)
         }
     }
 

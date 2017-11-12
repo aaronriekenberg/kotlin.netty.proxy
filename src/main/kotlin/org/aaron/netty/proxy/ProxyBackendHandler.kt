@@ -19,7 +19,10 @@ class ProxyBackendHandler(
     }
 
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
-        writeChunkAndTriggerRead(ctx.channel(), inboundChannel, msg)
+        writeChunkAndTriggerRead(
+                readChannel = ctx.channel(),
+                writeChannel = inboundChannel,
+                chunk = msg)
     }
 
     override fun channelInactive(ctx: ChannelHandlerContext) {
