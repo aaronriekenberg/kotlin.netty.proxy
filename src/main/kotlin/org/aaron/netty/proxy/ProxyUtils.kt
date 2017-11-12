@@ -13,6 +13,7 @@ import io.netty.channel.kqueue.KQueueServerSocketChannel
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.ServerSocketChannel
 import io.netty.channel.socket.nio.NioServerSocketChannel
+import io.netty.util.ReferenceCountUtil
 import kotlin.reflect.KClass
 
 data class HostAndPort(val host: String, val port: Int)
@@ -39,10 +40,11 @@ fun Channel.closeOnFlush() {
     }
 }
 
-fun writeChunkAndTriggerRead(readChannel: Channel, writeChannel: Channel, chunk: Any): Boolean {
+fun Channel?.writeChunkAndTriggerRead(readChannel: Channel, chunk: Any) {
     var consumedChunk = false
+    val writeChannel = this
 
-    if (writeChannel.isActive) {
+    if (writeChannel != null && writeChannel.isActive) {
         writeChannel.writeAndFlush(chunk).addListener({ future ->
             if (future.isSuccess) {
                 readChannel.read()
@@ -53,5 +55,7 @@ fun writeChunkAndTriggerRead(readChannel: Channel, writeChannel: Channel, chunk:
         consumedChunk = true
     }
 
-    return consumedChunk
+    if (!consumedChunk) {
+        ReferenceCountUtil.release(chunk)
+    }
 }

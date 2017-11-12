@@ -5,7 +5,6 @@ import io.netty.channel.Channel
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import io.netty.channel.ChannelOption
-import io.netty.util.ReferenceCountUtil
 import org.slf4j.LoggerFactory
 
 
@@ -47,19 +46,9 @@ class ProxyFrontendHandler(
     }
 
     override fun channelRead(ctx: ChannelHandlerContext, chunk: Any) {
-        var consumedChunk = false
-        try {
-            outboundChannel?.let {
-                consumedChunk = writeChunkAndTriggerRead(
-                        readChannel = ctx.channel(),
-                        writeChannel = it,
-                        chunk = chunk)
-            }
-        } finally {
-            if (!consumedChunk) {
-                ReferenceCountUtil.release(chunk)
-            }
-        }
+        outboundChannel.writeChunkAndTriggerRead(
+                readChannel = ctx.channel(),
+                chunk = chunk)
     }
 
     override fun channelInactive(ctx: ChannelHandlerContext) {

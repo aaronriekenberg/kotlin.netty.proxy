@@ -3,7 +3,6 @@ package org.aaron.netty.proxy
 import io.netty.channel.Channel
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
-import io.netty.util.ReferenceCountUtil
 import org.slf4j.LoggerFactory
 
 class ProxyBackendHandler(
@@ -20,17 +19,9 @@ class ProxyBackendHandler(
     }
 
     override fun channelRead(ctx: ChannelHandlerContext, chunk: Any) {
-        var consumedChunk = false
-        try {
-            consumedChunk = writeChunkAndTriggerRead(
-                    readChannel = ctx.channel(),
-                    writeChannel = inboundChannel,
-                    chunk = chunk)
-        } finally {
-            if (!consumedChunk) {
-                ReferenceCountUtil.release(chunk)
-            }
-        }
+        inboundChannel.writeChunkAndTriggerRead(
+                readChannel = ctx.channel(),
+                chunk = chunk)
     }
 
     override fun channelInactive(ctx: ChannelHandlerContext) {
