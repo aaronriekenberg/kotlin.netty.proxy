@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory
 
 
 class ProxyFrontendHandler(
-        private val remoteHost: String,
-        private val remotePort: Int) : ChannelInboundHandlerAdapter() {
+        private val remoteHostAndPort: HostAndPort) : ChannelInboundHandlerAdapter() {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ProxyFrontendHandler::class.java)
@@ -32,7 +31,7 @@ class ProxyFrontendHandler(
                 .handler(ProxyBackendHandler(inboundChannel))
                 .option(ChannelOption.AUTO_READ, false)
 
-        val f = b.connect(remoteHost, remotePort)
+        val f = b.connect(remoteHostAndPort.host, remoteHostAndPort.port)
         outboundChannel = f.channel()
 
         f.addListener({ future ->

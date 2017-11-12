@@ -7,15 +7,14 @@ import kotlin.system.exitProcess
 
 class KotlinProxy(
         private val localPort: Int,
-        private val remoteHost: String,
-        private val remotePort: Int) {
+        private val remoteHostAndPort: HostAndPort) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(KotlinProxy::class.java)
     }
 
     fun run() {
-        LOG.info("proxying *:{} to {}:{}", localPort, remoteHost, remotePort)
+        LOG.info("proxying *:{} to {}:{}", localPort, remoteHostAndPort.host, remoteHostAndPort.port)
 
         val bossGroup = createEventLoopGroup(1)
         val workerGroup = createEventLoopGroup()
@@ -26,7 +25,7 @@ class KotlinProxy(
             val b = ServerBootstrap()
             val channel = b.group(bossGroup, workerGroup)
                     .channel(serverSocketChannelClass().java)
-                    .childHandler(ProxyInitializer(remoteHost, remotePort))
+                    .childHandler(ProxyInitializer(remoteHostAndPort))
                     .childOption(ChannelOption.AUTO_READ, false)
                     .bind(localPort).sync().channel()
             LOG.info("listening channel {}", channel)
@@ -46,7 +45,8 @@ fun main(args: Array<String>) {
 
     KotlinProxy(
             localPort = args[0].toInt(),
-            remoteHost = args[1],
-            remotePort = args[2].toInt()
+            remoteHostAndPort = HostAndPort(
+                    host = args[1],
+                    port = args[2].toInt())
     ).run()
 }

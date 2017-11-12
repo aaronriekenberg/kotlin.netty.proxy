@@ -15,6 +15,8 @@ import io.netty.channel.socket.ServerSocketChannel
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import kotlin.reflect.KClass
 
+data class HostAndPort(val host: String, val port: Int)
+
 fun createEventLoopGroup(threads: Int = 0): EventLoopGroup {
     return when {
         Epoll.isAvailable() -> EpollEventLoopGroup(threads)
