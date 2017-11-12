@@ -42,20 +42,22 @@ fun Channel.closeOnFlush() {
 
 fun Channel?.writeChunkAndTriggerRead(readChannel: Channel, chunk: Any) {
     var consumedChunk = false
-    val writeChannel = this
 
-    if (writeChannel != null && writeChannel.isActive) {
-        writeChannel.writeAndFlush(chunk).addListener({ future ->
-            if (future.isSuccess) {
-                readChannel.read()
-            } else {
-                writeChannel.close()
-            }
-        })
-        consumedChunk = true
-    }
-
-    if (!consumedChunk) {
-        ReferenceCountUtil.release(chunk)
+    try {
+        val writeChannel = this
+        if (writeChannel != null && writeChannel.isActive) {
+            writeChannel.writeAndFlush(chunk).addListener({ future ->
+                if (future.isSuccess) {
+                    readChannel.read()
+                } else {
+                    writeChannel.close()
+                }
+            })
+            consumedChunk = true
+        }
+    } finally {
+        if (!consumedChunk) {
+            ReferenceCountUtil.release(chunk)
+        }
     }
 }
