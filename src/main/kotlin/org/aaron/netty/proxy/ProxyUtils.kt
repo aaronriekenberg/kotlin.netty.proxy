@@ -3,7 +3,7 @@ package org.aaron.netty.proxy
 import io.netty.buffer.Unpooled
 import io.netty.channel.Channel
 import io.netty.channel.ChannelFutureListener
-import io.netty.channel.EventLoopGroup
+import io.netty.channel.MultithreadEventLoopGroup
 import io.netty.channel.epoll.Epoll
 import io.netty.channel.epoll.EpollEventLoopGroup
 import io.netty.channel.epoll.EpollServerSocketChannel
@@ -18,7 +18,7 @@ import kotlin.reflect.KClass
 
 data class HostAndPort(val host: String, val port: Int)
 
-fun createEventLoopGroup(threads: Int = 0): EventLoopGroup {
+fun createEventLoopGroup(threads: Int = 0): MultithreadEventLoopGroup {
     return when {
         Epoll.isAvailable() -> EpollEventLoopGroup(threads)
         KQueue.isAvailable() -> KQueueEventLoopGroup(threads)
