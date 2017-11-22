@@ -18,21 +18,19 @@ import kotlin.reflect.KClass
 
 data class HostAndPort(val host: String, val port: Int)
 
-fun createEventLoopGroup(threads: Int = 0): MultithreadEventLoopGroup {
-    return when {
-        Epoll.isAvailable() -> EpollEventLoopGroup(threads)
-        KQueue.isAvailable() -> KQueueEventLoopGroup(threads)
-        else -> NioEventLoopGroup(threads)
-    }
-}
+fun createEventLoopGroup(threads: Int = 0): MultithreadEventLoopGroup =
+        when {
+            Epoll.isAvailable() -> EpollEventLoopGroup(threads)
+            KQueue.isAvailable() -> KQueueEventLoopGroup(threads)
+            else -> NioEventLoopGroup(threads)
+        }
 
-fun serverSocketChannelClass(): KClass<out ServerSocketChannel> {
-    return when {
-        Epoll.isAvailable() -> EpollServerSocketChannel::class
-        KQueue.isAvailable() -> KQueueServerSocketChannel::class
-        else -> NioServerSocketChannel::class
-    }
-}
+fun serverSocketChannelClass(): KClass<out ServerSocketChannel> =
+        when {
+            Epoll.isAvailable() -> EpollServerSocketChannel::class
+            KQueue.isAvailable() -> KQueueServerSocketChannel::class
+            else -> NioServerSocketChannel::class
+        }
 
 fun Channel.closeOnFlush() {
     if (isActive) {
