@@ -19,8 +19,8 @@ class KotlinProxy(
         val bossGroup = createEventLoopGroup(1)
         val workerGroup = createEventLoopGroup()
 
-        LOG.info("bossGroup {} executorCount {}", bossGroup.javaClass.simpleName, bossGroup.executorCount())
-        LOG.info("workerGroup {} executorCount {}", workerGroup.javaClass.simpleName, workerGroup.executorCount())
+        LOG.info("bossGroup={} executorCount={}", bossGroup.javaClass.simpleName, bossGroup.executorCount())
+        LOG.info("workerGroup={} executorCount={}", workerGroup.javaClass.simpleName, workerGroup.executorCount())
 
         try {
             val b = ServerBootstrap()
