@@ -2,6 +2,7 @@ package org.aaron.netty.proxy
 
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
+import io.netty.util.Version
 import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
 
@@ -15,6 +16,8 @@ class KotlinProxy(
 
     fun run() {
         LOG.info("proxying *:{} to {}:{}", localPort, remoteHostAndPort.host, remoteHostAndPort.port)
+
+        LOG.info("netty version {}", Version.identify())
 
         val bossGroup = createEventLoopGroup(1)
         val workerGroup = createEventLoopGroup()
