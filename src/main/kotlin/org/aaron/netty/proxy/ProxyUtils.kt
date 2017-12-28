@@ -35,6 +35,8 @@ fun serverSocketChannelClass(): KClass<out ServerSocketChannel> =
 fun Channel.closeOnFlush() {
     if (isActive) {
         writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE)
+    } else {
+        close()
     }
 }
 
