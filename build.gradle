@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext {
-        kotlin_version = '1.2.40'
+        kotlin_version = '1.2.41'
         logback_version = '1.2.3'
         netty_version = '4.1.24.Final'
         shadow_version = '2.0.1'
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
     compile "io.netty:netty-all:$netty_version"
 
