@@ -25,6 +25,7 @@ class ProxyBackendHandler(
     override fun channelInactive(ctx: ChannelHandlerContext) {
         logger.info { "channelInactive ${ctx.channel()}" }
 
+        ctx.channel().closeOnFlush()
         inboundChannel.closeOnFlush()
     }
 
