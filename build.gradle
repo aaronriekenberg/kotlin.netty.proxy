@@ -5,8 +5,9 @@ buildscript {
     ext {
         kotlin_version = '1.2.41'
         logback_version = '1.2.3'
+        kotlin_logging_version = '1.5.4'
         netty_version = '4.1.24.Final'
-        shadow_version = '2.0.1'
+        shadow_version = '2.0.4'
     }
 
     repositories {
@@ -31,7 +32,9 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
+    compile "io.github.microutils:kotlin-logging:$kotlin_logging_version"
     compile "io.netty:netty-all:$netty_version"
+
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
@@ -44,7 +47,7 @@ compileTestKotlin {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.6'
+    gradleVersion = '4.7'
 }
 
 jar {

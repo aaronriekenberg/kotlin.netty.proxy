@@ -46,13 +46,13 @@ fun Channel?.writeChunkAndTriggerRead(chunk: Any, readChannel: Channel) {
     try {
         val writeChannel = this
         if (writeChannel != null && writeChannel.isActive) {
-            writeChannel.writeAndFlush(chunk).addListener({ future ->
+            writeChannel.writeAndFlush(chunk).addListener { future ->
                 if (future.isSuccess) {
                     readChannel.read()
                 } else {
-                    writeChannel.close()
+                    writeChannel.closeOnFlush()
                 }
-            })
+            }
             consumedChunk = true
         }
     } finally {

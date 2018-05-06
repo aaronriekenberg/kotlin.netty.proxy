@@ -3,27 +3,25 @@ package org.aaron.netty.proxy
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.ChannelOption
 import io.netty.util.Version
-import org.slf4j.LoggerFactory
+import mu.KLogging
 import kotlin.system.exitProcess
 
 class KotlinProxy(
         private val localPort: Int,
         private val remoteHostAndPort: HostAndPort) {
 
-    companion object {
-        private val LOG = LoggerFactory.getLogger(KotlinProxy::class.java)
-    }
+    companion object : KLogging()
 
     fun run() {
-        LOG.info("proxying *:{} to {}:{}", localPort, remoteHostAndPort.host, remoteHostAndPort.port)
+        logger.info { "proxying *:$localPort to ${remoteHostAndPort.host}:${remoteHostAndPort.port}" }
 
-        LOG.info("netty version {}", Version.identify())
+        logger.info { "netty version ${Version.identify()}" }
 
         val bossGroup = createEventLoopGroup(1)
         val workerGroup = createEventLoopGroup()
 
-        LOG.info("bossGroup={} executorCount={}", bossGroup.javaClass.simpleName, bossGroup.executorCount())
-        LOG.info("workerGroup={} executorCount={}", workerGroup.javaClass.simpleName, workerGroup.executorCount())
+        logger.info { "bossGroup=${bossGroup.javaClass.simpleName} executorCount=${bossGroup.executorCount()}" }
+        logger.info { "workerGroup=${workerGroup.javaClass.simpleName} executorCount=${workerGroup.executorCount()}" }
 
         try {
             val b = ServerBootstrap()
@@ -32,7 +30,7 @@ class KotlinProxy(
                     .childHandler(ProxyInitializer(remoteHostAndPort))
                     .childOption(ChannelOption.AUTO_READ, false)
                     .bind(localPort).sync().channel()
-            LOG.info("listening channel {}", channel)
+            logger.info { "listening channel $channel" }
             channel.closeFuture().sync()
         } finally {
             bossGroup.shutdownGracefully()
