@@ -6,7 +6,7 @@ buildscript {
         kotlin_version = '1.2.41'
         logback_version = '1.2.3'
         kotlin_logging_version = '1.5.4'
-        netty_version = '4.1.24.Final'
+        netty_version = '4.1.25.Final'
         shadow_version = '2.0.4'
     }
 
