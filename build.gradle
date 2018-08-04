@@ -3,10 +3,10 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext {
-        kotlin_version = '1.2.41'
+        kotlin_version = '1.2.60'
         logback_version = '1.2.3'
-        kotlin_logging_version = '1.5.4'
-        netty_version = '4.1.25.Final'
+        kotlin_logging_version = '1.5.8'
+        netty_version = '4.1.28.Final'
         shadow_version = '2.0.4'
     }
 
@@ -47,7 +47,7 @@ compileTestKotlin {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.7'
+    gradleVersion = '4.9'
 }
 
 jar {
